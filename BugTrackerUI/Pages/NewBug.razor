@@ -2,7 +2,9 @@
 
 <h3>Add New Bug</h3>
 
-<EditForm Model="AddBug" OnValidSubmit="HandleValidSubmit">
+<EditForm OnValidSubmit="HandleValidSubmit" Model="AddBug">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <InputText @bind-Value="@AddBug.Title" placeholder="Enter Title" />
     <InputText @bind-Value="@AddBug.Description" placeholder="Enter Description" />
     <InputNumber @bind-Value="@AddBug.Priority" placeholder="Enter Priority" />
@@ -10,16 +12,17 @@
 </EditForm>
 
 @code {
+    [Inject]
+    public IBugService BugService { get; set; }
+
+    [Inject]
+    public NavigationManager NavService { get; set; }
 
     public Bug AddBug { get; set; } = new Bug();
-    [Inject]
-    public IBugService BugService { get; set; };
-    [Inject]
-    public NavigationManager NavService { get; set;};
+
     protected void HandleValidSubmit()
     {
-    BugService.AddBug(AddBug);
-    NavService.NavigateTo("");
+        BugService.AddBug(AddBug);
+        NavService.NavigateTo("");
     }
-
 }
